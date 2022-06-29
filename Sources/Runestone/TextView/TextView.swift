@@ -2,6 +2,7 @@
 
 import CoreText
 import UIKit
+import TreeSitter
 
 /// A type similiar to UITextView with features commonly found in code editors.
 ///
@@ -544,6 +545,13 @@ open class TextView: UIScrollView {
         set {
             textInputView.lineEndings = newValue
         }
+    }
+
+    public var tree: TreeSitterTree? {
+        if let treeSitterLanguageMode = self.textInputView.languageMode as? TreeSitterInternalLanguageMode {
+            return treeSitterLanguageMode.tree
+        }
+        return nil
     }
 
     private let textInputView: TextInputView

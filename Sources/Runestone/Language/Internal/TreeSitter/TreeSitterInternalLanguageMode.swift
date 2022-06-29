@@ -17,6 +17,10 @@ final class TreeSitterInternalLanguageMode: InternalLanguageMode {
     private let rootLanguageLayer: TreeSitterLanguageLayer
     private let operationQueue = OperationQueue()
 
+    public var tree: TreeSitterTree? {
+        self.rootLanguageLayer.tree
+    }
+
     init(language: TreeSitterInternalLanguage, languageProvider: TreeSitterLanguageProvider?, stringView: StringView, lineManager: LineManager) {
         self.stringView = stringView
         self.lineManager = lineManager
