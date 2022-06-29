@@ -10,7 +10,7 @@ let package = Package(
         .iOS(.v14)
     ],
     products: [
-        .library(name: "Runestone", targets: ["Runestone"])
+        .library(name: "Runestone", targets: ["Runestone"]),
     ],
     targets: [
         .target(name: "Runestone", dependencies: ["TreeSitter"]),

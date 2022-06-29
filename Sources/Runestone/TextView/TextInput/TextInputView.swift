@@ -505,8 +505,7 @@ final class TextInputView: UIView, UITextInput {
     }
     var lineEndings: LineEnding = .lf
 
-    // MARK: - Private
-    private var languageMode: InternalLanguageMode = PlainTextInternalLanguageMode() {
+    var languageMode: InternalLanguageMode = PlainTextInternalLanguageMode() {
         didSet {
             if languageMode !== oldValue {
                 indentController.languageMode = languageMode
@@ -516,6 +515,8 @@ final class TextInputView: UIView, UITextInput {
             }
         }
     }
+
+    // MARK: - Private
     private let layoutManager: LayoutManager
     private let timedUndoManager = TimedUndoManager()
     private let indentController: IndentController
