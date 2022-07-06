@@ -91,6 +91,10 @@ private extension TreeSitterSyntaxHighlighter {
             if let shadow = token.shadow {
                 attributes[.shadow] = shadow
             }
+            if let accessory = token.accessory {
+                let data = "Attachment".data(using: .utf8)!
+                attributes[.attachment] = NSTextAttachment(data: data, ofType: nil)
+            }
             if token.fontTraits.contains(.bold) {
                 attributedString.addAttribute(.isBold, value: true, range: token.range)
             }
@@ -150,7 +154,8 @@ private extension TreeSitterSyntaxHighlighter {
         let shadow = theme.shadow(for: capture.name)
         let font = theme.font(for: capture.name)
         let fontTraits = theme.fontTraits(for: capture.name)
-        return TreeSitterSyntaxHighlightToken(range: range, textColor: textColor, shadow: shadow, font: font, fontTraits: fontTraits)
+        let accessory = theme.accessory(for: capture.name)
+        return TreeSitterSyntaxHighlightToken(range: range, textColor: textColor, shadow: shadow, font: font, fontTraits: fontTraits, accessory: accessory)
     }
 }
 

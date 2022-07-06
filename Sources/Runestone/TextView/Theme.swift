@@ -49,6 +49,10 @@ public protocol Theme: AnyObject {
     ///
     /// See <doc:CreatingATheme> for more information on higlight names.
     func shadow(for highlightName: String) -> NSShadow?
+    /// Accessory of text matching the capture sequence.
+    ///
+    /// See <doc:CreatingATheme> for more information on higlight names.
+    func accessory(for highlightName: String) -> String?
 }
 
 public extension Theme {
@@ -73,6 +77,10 @@ public extension Theme {
     }
 
     func shadow(for highlightName: String) -> NSShadow? {
+        return nil
+    }
+
+    func accessory(for highlightName: String) -> String? {
         return nil
     }
 }
