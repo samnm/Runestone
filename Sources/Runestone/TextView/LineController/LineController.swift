@@ -428,4 +428,14 @@ extension LineController: LineFragmentControllerDelegate {
         let range = NSRange(location: line.location + cfRange.location, length: cfRange.length)
         return stringView.substring(in: range)
     }
+
+    func accessory(in controller: LineFragmentController) -> Bool {
+        guard let attributedString = attributedString else {
+            return false
+        }
+        let lineFragment = controller.lineFragment
+        let cfRange = CTLineGetStringRange(lineFragment.line)
+        let range = NSRange(location: cfRange.location, length: cfRange.length)
+        return attributedString.containsAttachments(in: range)
+    }
 }
