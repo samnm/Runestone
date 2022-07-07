@@ -479,7 +479,7 @@ final class LayoutManager {
         let traits = try! JSONDecoder().decode(AccessoryTraits.self, from: data)
         let color = traits.color.cgColor
         effectiveRange.location += lineController.line.location
-        return LineAccessory(color: color, range: effectiveRange)
+        return LineAccessory(attachment: traits.attachment, color: color, range: effectiveRange)
     }
 }
 
