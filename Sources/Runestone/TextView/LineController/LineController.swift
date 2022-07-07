@@ -429,13 +429,23 @@ extension LineController: LineFragmentControllerDelegate {
         return stringView.substring(in: range)
     }
 
-    func accessory(in controller: LineFragmentController) -> Bool {
+    func accessory(in controller: LineFragmentController) -> [LineAccessory]? {
         guard let attributedString = attributedString else {
-            return false
+            return nil
         }
         let lineFragment = controller.lineFragment
         let cfRange = CTLineGetStringRange(lineFragment.line)
         let range = NSRange(location: cfRange.location, length: cfRange.length)
-        return attributedString.containsAttachments(in: range)
+        if attributedString.containsAttachments(in: range) {
+            var accessories: [LineAccessory] = []
+            attributedString.enumerateAttribute(.attachment, in: range) { value, range, _ in
+                if value != nil {
+                    let color = UIColor.systemRed.cgColor
+                    accessories.append(LineAccessory(color: color, range: range))
+                }
+            }
+            return accessories
+        }
+        return nil
     }
 }
