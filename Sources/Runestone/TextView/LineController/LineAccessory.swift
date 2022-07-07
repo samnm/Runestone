@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-struct LineAccessory {
-    let color: CGColor
-    let range: NSRange
+public struct LineAccessory {
+    public let color: CGColor
+    public let range: NSRange
 }
