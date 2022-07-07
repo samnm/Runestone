@@ -63,7 +63,7 @@ public protocol Theme: AnyObject {
     /// Accessory of text matching the capture sequence.
     ///
     /// See <doc:CreatingATheme> for more information on higlight names.
-    func accessory(for highlightName: String) -> String?
+    func accessoryTraits(for highlightName: String) -> AccessoryTraits?
 }
 
 public extension Theme {
@@ -107,7 +107,7 @@ public extension Theme {
     }
 #endif
 
-    func accessory(for highlightName: String) -> String? {
+    func accessoryTraits(for highlightName: String) -> AccessoryTraits? {
         return nil
     }
 }

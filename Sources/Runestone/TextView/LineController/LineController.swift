@@ -439,10 +439,14 @@ extension LineController: LineFragmentControllerDelegate {
         if attributedString.containsAttachments(in: range) {
             var accessories: [LineAccessory] = []
             attributedString.enumerateAttribute(.attachment, in: range) { value, range, _ in
-                if value != nil {
-                    let color = UIColor.systemRed.cgColor
-                    accessories.append(LineAccessory(color: color, range: range))
+                guard let value = value as? NSTextAttachment,
+                      let data = value.contents
+                else {
+                    return
                 }
+                let attachment = try! JSONDecoder().decode(AccessoryTraits.self, from: data)
+                let color = attachment.color.cgColor
+                accessories.append(LineAccessory(color: color, range: range))
             }
             return accessories
         }
