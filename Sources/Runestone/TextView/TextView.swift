@@ -774,6 +774,10 @@ open class TextView: UIScrollView {
         return textInputView.syntaxNode(at: location)
     }
 
+    public func accessory(at location: Int) -> LineAccessory? {
+        return textInputView.accessory(at: location)
+    }
+
     /// Checks if the specified locations is within the indentation of the line.
     ///
     /// - Parameter location: A location in the document.
