@@ -436,9 +436,9 @@ extension LineController: LineFragmentControllerDelegate {
                 else {
                     return
                 }
-                let attachment = try! JSONDecoder().decode(AccessoryTraits.self, from: data)
-                let color = attachment.color.cgColor
-                accessories.append(LineAccessory(color: color, range: range))
+                let traits = try! JSONDecoder().decode(AccessoryTraits.self, from: data)
+                let color = traits.color.cgColor
+                accessories.append(LineAccessory(attachment: traits.attachment, color: color, range: range))
             }
             return accessories
         }
