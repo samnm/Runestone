@@ -49,6 +49,10 @@ public protocol Theme: AnyObject {
     ///
     /// See <doc:CreatingATheme> for more information on higlight names.
     func shadow(for highlightName: String) -> NSShadow?
+    /// Accessory of text matching the capture sequence.
+    ///
+    /// See <doc:CreatingATheme> for more information on higlight names.
+    func accessoryTraits(for highlightName: String) -> AccessoryTraits?
 #if compiler(>=5.7)
     /// Highlighted range for a text range matching a search query.
     ///
@@ -89,6 +93,10 @@ public extension Theme {
         return nil
     }
 
+    func accessoryTraits(for highlightName: String) -> AccessoryTraits? {
+        return nil
+    }
+
 #if compiler(>=5.7)
     @available(iOS 16, *)
     func highlightedRange(forFoundTextRange foundTextRange: NSRange, ofStyle style: UITextSearchFoundTextStyle) -> HighlightedRange? {
@@ -104,4 +112,5 @@ public extension Theme {
         }
     }
 #endif
+
 }

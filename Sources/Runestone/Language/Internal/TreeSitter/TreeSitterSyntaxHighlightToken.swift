@@ -6,16 +6,18 @@ final class TreeSitterSyntaxHighlightToken {
     let shadow: NSShadow?
     let font: UIFont?
     let fontTraits: FontTraits
+    let accessoryTraits: AccessoryTraits?
     var isEmpty: Bool {
         return range.length == 0 || (textColor == nil && font == nil && shadow == nil)
     }
 
-    init(range: NSRange, textColor: UIColor?, shadow: NSShadow?, font: UIFont?, fontTraits: FontTraits) {
+    init(range: NSRange, textColor: UIColor?, shadow: NSShadow?, font: UIFont?, fontTraits: FontTraits, accessoryTraits: AccessoryTraits?) {
         self.range = range
         self.textColor = textColor
         self.shadow = shadow
         self.font = font
         self.fontTraits = fontTraits
+        self.accessoryTraits = accessoryTraits
     }
 }
 

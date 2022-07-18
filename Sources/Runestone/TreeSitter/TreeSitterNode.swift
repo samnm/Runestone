@@ -1,8 +1,8 @@
 import TreeSitter
 
-final class TreeSitterNode {
+final public class TreeSitterNode {
     let rawValue: TSNode
-    var expressionString: String? {
+    public var expressionString: String? {
         if let str = ts_node_string(rawValue) {
             let result = String(cString: str)
             str.deallocate()
@@ -11,7 +11,7 @@ final class TreeSitterNode {
             return nil
         }
     }
-    var type: String? {
+    public var type: String? {
         if let str = ts_node_type(rawValue) {
             return String(cString: str)
         } else {
@@ -33,19 +33,19 @@ final class TreeSitterNode {
     var byteRange: ByteRange {
         return ByteRange(from: startByte, to: endByte)
     }
-    var parent: TreeSitterNode? {
+    public var parent: TreeSitterNode? {
         return getRelationship(using: ts_node_parent)
     }
-    var previousSibling: TreeSitterNode? {
+    public var previousSibling: TreeSitterNode? {
         return getRelationship(using: ts_node_prev_sibling)
     }
-    var nextSibling: TreeSitterNode? {
+    public var nextSibling: TreeSitterNode? {
         return getRelationship(using: ts_node_next_sibling)
     }
     var textRange: TreeSitterTextRange {
         return TreeSitterTextRange(startPoint: startPoint, endPoint: endPoint, startByte: startByte, endByte: endByte)
     }
-    var childCount: Int {
+    public var childCount: Int {
         return Int(ts_node_child_count(rawValue))
     }
 
@@ -58,7 +58,7 @@ final class TreeSitterNode {
         return TreeSitterNode(node: node)
     }
 
-    func child(at index: Int) -> TreeSitterNode? {
+    public func child(at index: Int) -> TreeSitterNode? {
         if index < childCount {
             let node = ts_node_child(rawValue, UInt32(index))
             return TreeSitterNode(node: node)
@@ -80,17 +80,17 @@ private extension TreeSitterNode {
 }
 
 extension TreeSitterNode: Hashable {
-    static func == (lhs: TreeSitterNode, rhs: TreeSitterNode) -> Bool {
+    static public func == (lhs: TreeSitterNode, rhs: TreeSitterNode) -> Bool {
         return lhs.rawValue.id == rhs.rawValue.id
     }
 
-    func hash(into hasher: inout Hasher) {
+    public func hash(into hasher: inout Hasher) {
         hasher.combine(rawValue.id)
     }
 }
 
 extension TreeSitterNode: CustomDebugStringConvertible {
-    var debugDescription: String {
+    public var debugDescription: String {
         return "[TreeSitterNode startByte=\(startByte) endByte=\(endByte) startPoint=\(startPoint) endPoint=\(endPoint)]"
     }
 }

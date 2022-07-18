@@ -2,6 +2,7 @@
 
 import CoreText
 import UIKit
+import TreeSitter
 
 /// A type similiar to UITextView with features commonly found in code editors.
 ///
@@ -571,6 +572,13 @@ open class TextView: UIScrollView {
     }
 #endif
 
+    public var tree: TreeSitterTree? {
+        if let treeSitterLanguageMode = self.textInputView.languageMode as? TreeSitterInternalLanguageMode {
+            return treeSitterLanguageMode.tree
+        }
+        return nil
+    }
+
     private let textInputView: TextInputView
     private let editableTextInteraction = UITextInteraction(for: .editable)
     private let nonEditableTextInteraction = UITextInteraction(for: .nonEditable)
@@ -791,6 +799,10 @@ open class TextView: UIScrollView {
     /// - Returns: The syntax node at the location.
     public func syntaxNode(at location: Int) -> SyntaxNode? {
         return textInputView.syntaxNode(at: location)
+    }
+
+    public func accessory(at location: Int) -> LineAccessory? {
+        return textInputView.accessory(at: location)
     }
 
     /// Checks if the specified locations is within the indentation of the line.

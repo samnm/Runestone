@@ -507,8 +507,7 @@ final class TextInputView: UIView, UITextInput {
     }
     var lineEndings: LineEnding = .lf
 
-    // MARK: - Private
-    private var languageMode: InternalLanguageMode = PlainTextInternalLanguageMode() {
+    var languageMode: InternalLanguageMode = PlainTextInternalLanguageMode() {
         didSet {
             if languageMode !== oldValue {
                 indentController.languageMode = languageMode
@@ -518,6 +517,8 @@ final class TextInputView: UIView, UITextInput {
             }
         }
     }
+
+    // MARK: - Private
     private let layoutManager: LayoutManager
     private let timedUndoManager = TimedUndoManager()
     private let indentController: IndentController
@@ -745,6 +746,10 @@ final class TextInputView: UIView, UITextInput {
         } else {
             return nil
         }
+    }
+
+    func accessory(at location: Int) -> LineAccessory? {
+        layoutManager.accessory(at: location)
     }
 
     func isIndentation(at location: Int) -> Bool {
