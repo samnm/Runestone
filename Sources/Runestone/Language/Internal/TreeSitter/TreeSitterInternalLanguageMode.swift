@@ -21,6 +21,10 @@ final class TreeSitterInternalLanguageMode: InternalLanguageMode {
         self.rootLanguageLayer.tree
     }
 
+    public var intelligenceCaptures: [TreeSitterCapture]? {
+        self.rootLanguageLayer.intelligenceCaptures
+    }
+
     init(language: TreeSitterInternalLanguage, languageProvider: TreeSitterLanguageProvider?, stringView: StringView, lineManager: LineManager) {
         self.stringView = stringView
         self.lineManager = lineManager
