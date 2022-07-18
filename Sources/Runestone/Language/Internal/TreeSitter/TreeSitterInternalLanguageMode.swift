@@ -21,7 +21,7 @@ final class TreeSitterInternalLanguageMode: InternalLanguageMode {
         self.rootLanguageLayer.tree
     }
 
-    public var intelligenceCaptures: [TreeSitterCapture]? {
+    public var intelligenceCaptures: [IntelligenceCapture]? {
         self.rootLanguageLayer.intelligenceCaptures
     }
 
