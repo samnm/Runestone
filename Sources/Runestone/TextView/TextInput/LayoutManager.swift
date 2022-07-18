@@ -130,6 +130,14 @@ final class LayoutManager {
             }
         }
     }
+    var lineBreakMode: LineBreakMode = .byWordWrapping {
+         didSet {
+             if lineBreakMode != oldValue {
+                 invalidateContentSize()
+                 invalidateLines()
+             }
+         }
+     }
     /// Leading padding inside the gutter.
     var gutterLeadingPadding: CGFloat = 3 {
         didSet {
@@ -384,6 +392,7 @@ final class LayoutManager {
             lineController.lineFragmentHeightMultiplier = lineHeightMultiplier
             lineController.tabWidth = tabWidth
             lineController.kern = kern
+            lineController.lineBreakMode = lineBreakMode
             lineController.invalidateSyntaxHighlighting()
         }
     }
@@ -685,6 +694,9 @@ extension LayoutManager {
                 nextLine = nil
             }
         }
+        if _textContentHeight == nil || _textContentWidth == nil {
+            delegate?.layoutManagerDidInvalidateContentSize(self)
+        }
     }
 
     // swiftlint:disable:next function_body_length
@@ -933,6 +945,7 @@ extension LayoutManager {
             lineController.lineFragmentHeightMultiplier = lineHeightMultiplier
             lineController.tabWidth = tabWidth
             lineController.theme = theme
+            lineController.lineBreakMode = lineBreakMode
             lineControllers[line.id] = lineController
             return lineController
         }

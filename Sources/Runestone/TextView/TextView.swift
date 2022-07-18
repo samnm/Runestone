@@ -431,6 +431,15 @@ open class TextView: UIScrollView {
             textInputView.isLineWrappingEnabled = newValue
         }
     }
+    /// Line break mode for text view. The default value is .byWordWrapping meaning that wrapping occurs on word boundaries.
+    public var lineBreakMode: LineBreakMode {
+        get {
+            return textInputView.lineBreakMode
+        }
+        set {
+            textInputView.lineBreakMode = newValue
+        }
+    }
     /// Width of the gutter.
     public var gutterWidth: CGFloat {
         return textInputView.gutterWidth
@@ -546,6 +555,22 @@ open class TextView: UIScrollView {
             textInputView.lineEndings = newValue
         }
     }
+#if compiler(>=5.7)
+    /// A boolean value that enables a text view’s built-in find interaction.
+    @available(iOS 16, *)
+    public var isFindInteractionEnabled: Bool {
+        get {
+            return textSearchingHelper.isFindInteractionEnabled
+        }
+        set {
+            textSearchingHelper.isFindInteractionEnabled = newValue
+        }
+    }
+    @available(iOS 16, *)
+    public var findInteraction: UIFindInteraction? {
+        return textSearchingHelper.findInteraction
+    }
+#endif
 
     public var tree: TreeSitterTree? {
         if let treeSitterLanguageMode = self.textInputView.languageMode as? TreeSitterInternalLanguageMode {
@@ -589,6 +614,7 @@ open class TextView: UIScrollView {
     private var isInputAccessoryViewEnabled = false
     private let keyboardObserver = KeyboardObserver()
     private let highlightNavigationController = HighlightNavigationController()
+    private var textSearchingHelper = UITextSearchingHelper()
     // Store a reference to instances of the private type UITextRangeAdjustmentGestureRecognizer in order to track adjustments
     // to the selected text range and scroll the text view when the handles approach the bottom.
     // The approach is based on the one described in Steve Shephard's blog post "Adventures with UITextInteraction".
@@ -623,6 +649,7 @@ open class TextView: UIScrollView {
         installNonEditableInteraction()
         keyboardObserver.delegate = self
         highlightNavigationController.delegate = self
+        textSearchingHelper.textView = self
     }
 
     /// The initializer has not been implemented.
@@ -832,6 +859,7 @@ open class TextView: UIScrollView {
         resignFirstResponder()
         becomeFirstResponder()
         let line = textInputView.lineManager.line(atRow: lineIndex)
+        textInputView.layoutLines(toLocation: line.location)
         scroll(to: line.location)
         layoutIfNeeded()
         switch selection {
@@ -1040,6 +1068,23 @@ extension TextView {
     }
 }
 
+extension TextView {
+    func scroll(to range: NSRange) {
+        let upperCaretRect = textInputView.caretRect(at: range.upperBound)
+        let lowerContentOffset = contentOffset(forScrollingToLocation: range.lowerBound)
+        let viewportWidth = frame.width - gutterWidth
+        let distanceOutOfScreen = upperCaretRect.minX - (lowerContentOffset.x + viewportWidth)
+        if distanceOutOfScreen > 0 {
+            // Scroll to reveal the entire range on the X-axis.
+            let offsetX = lowerContentOffset.x + min(distanceOutOfScreen, viewportWidth)
+            let cappedOffsetX = min(max(offsetX, minimumContentOffset.x), maximumContentOffset.x)
+            contentOffset = CGPoint(x: cappedOffsetX, y: lowerContentOffset.y)
+        } else {
+            contentOffset = lowerContentOffset
+        }
+    }
+}
+
 private extension TextView {
     @objc private func handleTap(_ gestureRecognizer: UITapGestureRecognizer) {
         guard isSelectable else {
@@ -1144,6 +1189,13 @@ private extension TextView {
     }
 
     private func scroll(to location: Int) {
+        let newContentOffset = contentOffset(forScrollingToLocation: location)
+        if newContentOffset != contentOffset {
+            setContentOffset(newContentOffset, animated: false)
+        }
+    }
+
+    private func contentOffset(forScrollingToLocation location: Int) -> CGPoint {
         let caretRect = textInputView.caretRect(at: location)
         let viewportMinX = contentOffset.x + automaticScrollInset.left + gutterWidth
         let viewportMinY = contentOffset.y + automaticScrollInset.top
@@ -1171,10 +1223,7 @@ private extension TextView {
         }
         let cappedXOffset = min(max(preferredContentOffset.x, minimumContentOffset.x), maximumContentOffset.x)
         let cappedYOffset = min(max(preferredContentOffset.y, minimumContentOffset.y), maximumContentOffset.y)
-        let cappedContentOffset = CGPoint(x: cappedXOffset, y: cappedYOffset)
-        if cappedContentOffset != contentOffset {
-            setContentOffset(cappedContentOffset, animated: false)
-        }
+        return CGPoint(x: cappedXOffset, y: cappedYOffset)
     }
 
     private func installEditableInteraction() {
@@ -1316,7 +1365,7 @@ extension TextView: HighlightNavigationControllerDelegate {
         _ = textInputView.becomeFirstResponder()
         // Layout lines up until the location of the range so we can scroll to it immediately after.
         textInputView.layoutLines(toLocation: range.upperBound)
-        scroll(to: range.location)
+        scroll(to: range)
         textInputView.selectedRange = range
         textInputView.presentEditMenuForText(in: range)
         switch highlightNavigationRange.loopMode {
@@ -1365,11 +1414,12 @@ extension TextView: KeyboardObserverDelegate {
                           keyboardWillShowWithHeight keyboardHeight: CGFloat,
                           animation: KeyboardObserver.Animation?) {
         if isAutomaticScrollEnabled, let newRange = textInputView.selectedRange, newRange.length == 0 {
-            scroll(to: newRange.location)
+            scroll(to: newRange)
         }
     }
 }
 
+// MARK: - UITextInteractionDelegate
 extension TextView: UITextInteractionDelegate {
     public func interactionShouldBegin(_ interaction: UITextInteraction, at point: CGPoint) -> Bool {
         if interaction.textInteractionMode == .editable {
