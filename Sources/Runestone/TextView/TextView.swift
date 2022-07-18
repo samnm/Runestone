@@ -579,7 +579,7 @@ open class TextView: UIScrollView {
         return nil
     }
 
-    public var intelligenceCaptures: [TreeSitterCapture]? {
+    public var intelligenceCaptures: [IntelligenceCapture]? {
         if let treeSitterLanguageMode = self.textInputView.languageMode as? TreeSitterInternalLanguageMode {
             return treeSitterLanguageMode.intelligenceCaptures
         }
