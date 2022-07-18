@@ -5,6 +5,7 @@ final class TreeSitterLanguageLayer {
 
     let language: TreeSitterInternalLanguage
     private(set) var tree: TreeSitterTree?
+    private(set) var intelligenceCaptures: [TreeSitterCapture]?
     var canHighlight: Bool {
         return parser.language != nil && tree != nil
     }
@@ -106,8 +107,7 @@ extension TreeSitterLanguageLayer {
         if let intelligenceQuery = language.intelligenceQuery, let node = tree?.rootNode {
             let queryCursor = TreeSitterQueryCursor(query: intelligenceQuery, node: node)
             queryCursor.execute()
-            let captures = queryCursor.validCaptures(in: stringView)
-            print(captures)
+            intelligenceCaptures = queryCursor.validCaptures(in: stringView)
         }
         if let injectionsQuery = language.injectionsQuery, let node = tree?.rootNode {
             let queryCursor = TreeSitterQueryCursor(query: injectionsQuery, node: node)
