@@ -108,7 +108,7 @@ extension TreeSitterLanguageLayer {
             let queryCursor = TreeSitterQueryCursor(query: intelligenceQuery, node: node)
             queryCursor.execute()
             intelligenceCaptures = queryCursor.validCaptures(in: stringView).map({ capture in
-                IntelligenceCapture(name: capture.name, rawContents: capture.node.expressionString)
+                IntelligenceCapture(name: capture.name, range: NSRange(capture.byteRange))
             })
         }
         if let injectionsQuery = language.injectionsQuery, let node = tree?.rootNode {

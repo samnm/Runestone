@@ -9,5 +9,5 @@ import Foundation
 
 public struct IntelligenceCapture {
     public var name: String
-    public var rawContents: String?
+    public var range: NSRange
 }
