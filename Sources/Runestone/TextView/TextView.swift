@@ -579,6 +579,13 @@ open class TextView: UIScrollView {
         return nil
     }
 
+    public var intelligenceCaptures: [TreeSitterCapture]? {
+        if let treeSitterLanguageMode = self.textInputView.languageMode as? TreeSitterInternalLanguageMode {
+            return treeSitterLanguageMode.intelligenceCaptures
+        }
+        return nil
+    }
+
     private let textInputView: TextInputView
     private let editableTextInteraction = UITextInteraction(for: .editable)
     private let nonEditableTextInteraction = UITextInteraction(for: .nonEditable)
