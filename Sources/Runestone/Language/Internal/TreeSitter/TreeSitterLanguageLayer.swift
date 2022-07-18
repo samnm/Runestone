@@ -103,6 +103,12 @@ extension TreeSitterLanguageLayer {
         prepareParser(toParse: ranges)
         tree = parser.parse(text)
         childLanguageLayers.removeAll()
+        if let intelligenceQuery = language.intelligenceQuery, let node = tree?.rootNode {
+            let queryCursor = TreeSitterQueryCursor(query: intelligenceQuery, node: node)
+            queryCursor.execute()
+            let captures = queryCursor.validCaptures(in: stringView)
+            print(captures)
+        }
         if let injectionsQuery = language.injectionsQuery, let node = tree?.rootNode {
             let queryCursor = TreeSitterQueryCursor(query: injectionsQuery, node: node)
             queryCursor.execute()

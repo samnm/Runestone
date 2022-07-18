@@ -13,6 +13,8 @@ public final class TreeSitterLanguage {
     public let highlightsQuery: TreeSitterLanguage.Query?
     /// Query used for detecting injected languages.
     public let injectionsQuery: TreeSitterLanguage.Query?
+    /// Query used for syntax-aware editor features.
+    public let intelligenceQuery: TreeSitterLanguage.Query?
     /// Rules used for indenting text.
     public let indentationScopes: TreeSitterIndentationScopes?
 
@@ -37,10 +39,12 @@ public final class TreeSitterLanguage {
     public init(_ language: UnsafePointer<TSLanguage>,
                 highlightsQuery: TreeSitterLanguage.Query? = nil,
                 injectionsQuery: TreeSitterLanguage.Query? = nil,
+                intelligenceQuery: TreeSitterLanguage.Query? = nil,
                 indentationScopes: TreeSitterIndentationScopes? = nil) {
         self.languagePointer = language
         self.highlightsQuery = highlightsQuery
         self.injectionsQuery = injectionsQuery
+        self.intelligenceQuery = intelligenceQuery
         self.indentationScopes = indentationScopes
     }
 
@@ -87,9 +91,11 @@ private extension TreeSitterInternalLanguage {
     convenience init(_ language: TreeSitterLanguage) {
         let highlightsQuery = Self.makeInternalQuery(from: language.highlightsQuery, with: language.languagePointer)
         let injectionsQuery = Self.makeInternalQuery(from: language.injectionsQuery, with: language.languagePointer)
+        let intelligenceQuery = Self.makeInternalQuery(from: language.intelligenceQuery, with: language.languagePointer)
         self.init(languagePointer: language.languagePointer,
                   highlightsQuery: highlightsQuery,
                   injectionsQuery: injectionsQuery,
+                  intelligenceQuery: intelligenceQuery,
                   indentationScopes: language.indentationScopes)
     }
 

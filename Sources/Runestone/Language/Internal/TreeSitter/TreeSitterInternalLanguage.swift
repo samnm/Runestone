@@ -4,15 +4,18 @@ final class TreeSitterInternalLanguage {
     let languagePointer: UnsafePointer<TSLanguage>
     let highlightsQuery: TreeSitterQuery?
     let injectionsQuery: TreeSitterQuery?
+    let intelligenceQuery: TreeSitterQuery?
     let indentationScopes: TreeSitterIndentationScopes?
 
     init(languagePointer: UnsafePointer<TSLanguage>,
          highlightsQuery: TreeSitterQuery?,
          injectionsQuery: TreeSitterQuery?,
+         intelligenceQuery: TreeSitterQuery?,
          indentationScopes: TreeSitterIndentationScopes?) {
         self.languagePointer = languagePointer
         self.highlightsQuery = highlightsQuery
         self.injectionsQuery = injectionsQuery
+        self.intelligenceQuery = intelligenceQuery
         self.indentationScopes = indentationScopes
     }
 }
