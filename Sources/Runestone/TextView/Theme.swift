@@ -58,8 +58,10 @@ public protocol Theme: AnyObject {
     ///   - foundTextRange: The text range matching a search query.
     ///   - style: Style used to decorate the text.
     /// - Returns: The object used for highlighting the provided text range, or `nil` if the range should not be highlighted.
+#if compiler(>=5.7)
     @available(iOS 16, *)
     func highlightedRange(forFoundTextRange foundTextRange: NSRange, ofStyle style: UITextSearchFoundTextStyle) -> HighlightedRange?
+#endif
     /// Accessory of text matching the capture sequence.
     ///
     /// See <doc:CreatingATheme> for more information on higlight names.
