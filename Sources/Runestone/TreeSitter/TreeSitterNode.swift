@@ -1,4 +1,5 @@
 import TreeSitter
+import Foundation
 
 final public class TreeSitterNode {
     let rawValue: TSNode
@@ -17,6 +18,9 @@ final public class TreeSitterNode {
         } else {
             return nil
         }
+    }
+    public var range: NSRange {
+        return NSRange(byteRange)
     }
     var startByte: ByteCount {
         return ByteCount(ts_node_start_byte(rawValue))
