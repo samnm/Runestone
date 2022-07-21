@@ -46,7 +46,7 @@ final public class TreeSitterNode {
     public var nextSibling: TreeSitterNode? {
         return getRelationship(using: ts_node_next_sibling)
     }
-    var textRange: TreeSitterTextRange {
+    public var textRange: TreeSitterTextRange {
         return TreeSitterTextRange(startPoint: startPoint, endPoint: endPoint, startByte: startByte, endByte: endByte)
     }
     public var childCount: Int {

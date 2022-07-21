@@ -1,10 +1,10 @@
 import TreeSitter
 
-final class TreeSitterTextPoint {
-    var row: UInt32 {
+final public class TreeSitterTextPoint {
+    public var row: UInt32 {
         return rawValue.row
     }
-    var column: UInt32 {
+    public var column: UInt32 {
         return rawValue.column
     }
 
@@ -20,7 +20,7 @@ final class TreeSitterTextPoint {
 }
 
 extension TreeSitterTextPoint: CustomDebugStringConvertible {
-    var debugDescription: String {
+    public var debugDescription: String {
         return "[TreeSitterTextPoint row=\(row) column=\(column)]"
     }
 }
