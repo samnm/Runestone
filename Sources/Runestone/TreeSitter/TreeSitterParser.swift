@@ -5,21 +5,21 @@ protocol TreeSitterParserDelegate: AnyObject {
     func parser(_ parser: TreeSitterParser, bytesAt byteIndex: ByteCount) -> TreeSitterTextProviderResult?
 }
 
-final class TreeSitterParser {
+final public class TreeSitterParser {
     weak var delegate: TreeSitterParserDelegate?
     let encoding: TSInputEncoding
-    var language: UnsafePointer<TSLanguage>? {
+    public var language: UnsafePointer<TSLanguage>? {
         didSet {
             ts_parser_set_language(pointer, language)
         }
     }
-    var canParse: Bool {
+    public var canParse: Bool {
         return language != nil
     }
 
     private var pointer: OpaquePointer
 
-    init(encoding: TSInputEncoding) {
+    public init(encoding: TSInputEncoding) {
         self.encoding = encoding
         self.pointer = ts_parser_new()
     }
@@ -28,7 +28,7 @@ final class TreeSitterParser {
         ts_parser_delete(pointer)
     }
 
-    func parse(_ string: NSString, oldTree: TreeSitterTree? = nil) -> TreeSitterTree? {
+    public func parse(_ string: NSString, oldTree: TreeSitterTree? = nil) -> TreeSitterTree? {
         guard string.length > 0 else {
             return nil
         }
@@ -46,7 +46,7 @@ final class TreeSitterParser {
         }
     }
 
-    func parse(oldTree: TreeSitterTree? = nil) -> TreeSitterTree? {
+    public func parse(oldTree: TreeSitterTree? = nil) -> TreeSitterTree? {
         let input = TreeSitterTextInput(encoding: encoding) { [weak self] byteIndex, _ in
             if let self = self {
                 return self.delegate?.parser(self, bytesAt: byteIndex)
@@ -64,20 +64,20 @@ final class TreeSitterParser {
     }
 
     @discardableResult
-    func setIncludedRanges(_ ranges: [TreeSitterTextRange]) -> Bool {
+    public func setIncludedRanges(_ ranges: [TreeSitterTextRange]) -> Bool {
         let rawRanges = ranges.map { $0.rawValue }
         return rawRanges.withUnsafeBufferPointer { rangesPointer in
             return ts_parser_set_included_ranges(pointer, rangesPointer.baseAddress, UInt32(rawRanges.count))
         }
     }
 
-    func removeAllIncludedRanges() {
+    public func removeAllIncludedRanges() {
         ts_parser_set_included_ranges(pointer, nil, 0)
     }
 }
 
-private extension TSInputEncoding {
-    var stringEncoding: String.Encoding? {
+extension TSInputEncoding {
+    public var stringEncoding: String.Encoding? {
         switch self {
         case TSInputEncodingUTF8:
             return .utf8
