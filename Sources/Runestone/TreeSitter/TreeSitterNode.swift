@@ -28,10 +28,10 @@ final public class TreeSitterNode {
     var endByte: ByteCount {
         return ByteCount(ts_node_end_byte(rawValue))
     }
-    var startPoint: TreeSitterTextPoint {
+    public var startPoint: TreeSitterTextPoint {
         return TreeSitterTextPoint(ts_node_start_point(rawValue))
     }
-    var endPoint: TreeSitterTextPoint {
+    public var endPoint: TreeSitterTextPoint {
         return TreeSitterTextPoint(ts_node_end_point(rawValue))
     }
     var byteRange: ByteRange {

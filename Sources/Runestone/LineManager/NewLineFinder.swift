@@ -1,7 +1,7 @@
 import Foundation
 
-enum NewLineFinder {
-    static func rangeOfNextNewLine(in text: NSString, startingAt location: Int) -> NSRange? {
+public enum NewLineFinder {
+    public static func rangeOfNextNewLine(in text: NSString, startingAt location: Int) -> NSRange? {
         let range = NSRange(location: location, length: 0)
         var end: Int = NSNotFound
         var contentsEnd: Int = NSNotFound

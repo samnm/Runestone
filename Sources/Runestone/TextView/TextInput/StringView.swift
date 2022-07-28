@@ -1,18 +1,18 @@
 import Foundation
 
-final class StringViewBytesResult {
+public final class StringViewBytesResult {
     // The bytes are not deallocated by this type.
-    let bytes: UnsafePointer<Int8>
-    let length: ByteCount
+    public let bytes: UnsafePointer<Int8>
+    public let length: ByteCount
 
-    init(bytes: UnsafePointer<Int8>, length: ByteCount) {
+    public init(bytes: UnsafePointer<Int8>, length: ByteCount) {
         self.bytes = bytes
         self.length = length
     }
 }
 
-final class StringView {
-    var string: NSString {
+public final class StringView {
+    public var string: NSString {
         get {
             return internalString
         }
@@ -39,15 +39,15 @@ final class StringView {
 
     private var _swiftString: String?
 
-    init(string: NSMutableString = NSMutableString()) {
+    public init(string: NSMutableString = NSMutableString()) {
         self.internalString = string
     }
 
-    convenience init(string: String) {
+    public convenience init(string: String) {
         self.init(string: NSMutableString(string: string))
     }
 
-    func substring(in range: NSRange) -> String? {
+    public func substring(in range: NSRange) -> String? {
         if range.location >= 0 && range.upperBound <= internalString.length && range.length > 0 {
             return internalString.substring(with: range)
         } else {
@@ -55,7 +55,7 @@ final class StringView {
         }
     }
 
-    func character(at location: Int) -> Character? {
+    public func character(at location: Int) -> Character? {
         if location >= 0 && location < string.length, let scalar = Unicode.Scalar(internalString.character(at: location)) {
             return Character(scalar)
         } else {
@@ -63,12 +63,12 @@ final class StringView {
         }
     }
 
-    func replaceText(in range: NSRange, with string: String) {
+    public func replaceText(in range: NSRange, with string: String) {
         internalString.replaceCharacters(in: range, with: string)
         invalidate()
     }
 
-    func bytes(in range: ByteRange) -> StringViewBytesResult? {
+    public func bytes(in range: ByteRange) -> StringViewBytesResult? {
         guard range.lowerBound.value >= 0 && range.upperBound <= string.byteCount else {
             return nil
         }

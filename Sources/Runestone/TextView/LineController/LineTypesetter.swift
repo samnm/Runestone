@@ -2,20 +2,20 @@ import CoreGraphics
 import CoreText
 import Foundation
 
-private final class TypesetResult {
-    let lineFragments: [LineFragment]
-    let lineFragmentsMap: [LineFragmentID: Int]
-    let maximumLineWidth: CGFloat
+public final class TypesetResult {
+    public let lineFragments: [LineFragment]
+    public let lineFragmentsMap: [LineFragmentID: Int]
+    public let maximumLineWidth: CGFloat
 
-    init(lineFragments: [LineFragment], lineFragmentsMap: [LineFragmentID: Int], maximumLineWidth: CGFloat) {
+    public init(lineFragments: [LineFragment], lineFragmentsMap: [LineFragmentID: Int], maximumLineWidth: CGFloat) {
         self.lineFragments = lineFragments
         self.lineFragmentsMap = lineFragmentsMap
         self.maximumLineWidth = maximumLineWidth
     }
 }
 
-final class LineTypesetter {
-    private enum TypesetEndCondition {
+public final class LineTypesetter {
+    public enum TypesetEndCondition {
         case yPosition(_ targetYPosition: CGFloat)
         case characterIndex(_ targetCharacterIndex: Int)
 
@@ -29,12 +29,12 @@ final class LineTypesetter {
         }
     }
 
-    var lineBreakMode: LineBreakMode = .byWordWrapping
-    var constrainingWidth: CGFloat = 0
-    var lineFragmentHeightMultiplier: CGFloat = 1
-    private(set) var lineFragments: [LineFragment] = []
-    private(set) var maximumLineWidth: CGFloat = 0
-    var bestGuessNumberOfLineFragments: Int {
+    public var lineBreakMode: LineBreakMode = .byWordWrapping
+    public var constrainingWidth: CGFloat = 0
+    public var lineFragmentHeightMultiplier: CGFloat = 1
+    private(set) public var lineFragments: [LineFragment] = []
+    private(set) public var maximumLineWidth: CGFloat = 0
+    public var bestGuessNumberOfLineFragments: Int {
         if startOffset >= stringLength {
             return lineFragments.count
         } else {
@@ -44,10 +44,10 @@ final class LineTypesetter {
             return lineFragments.count + remainingNumberOfLineFragments
         }
     }
-    var isFinishedTypesetting: Bool {
+    public var isFinishedTypesetting: Bool {
         return startOffset >= stringLength
     }
-    var typesetLength: Int {
+    public var typesetLength: Int {
         return startOffset
     }
 
@@ -60,11 +60,11 @@ final class LineTypesetter {
     private var nextYPosition: CGFloat = 0
     private var lineFragmentIndex = 0
 
-    init(lineID: String) {
+    public init(lineID: String) {
         self.lineID = lineID
     }
 
-    func reset() {
+    public func reset() {
         lineFragments = []
         maximumLineWidth = 0
         stringLength = 0
@@ -76,14 +76,14 @@ final class LineTypesetter {
         lineFragmentIndex = 0
     }
 
-    func prepareToTypeset(_ attributedString: NSAttributedString) {
+    public func prepareToTypeset(_ attributedString: NSAttributedString) {
         self.attributedString = attributedString
         stringLength = CFAttributedStringGetLength(attributedString)
         typesetter = CTTypesetterCreateWithAttributedString(attributedString)
     }
 
     @discardableResult
-    func typesetLineFragments(in rect: CGRect) -> [LineFragment] {
+    public func typesetLineFragments(in rect: CGRect) -> [LineFragment] {
         let lineFragments = typesetLineFragments(until: .yPosition(rect.maxY))
         if isFinishedTypesetting {
             attributedString = nil
@@ -93,7 +93,7 @@ final class LineTypesetter {
     }
 
     @discardableResult
-    func typesetLineFragments(toLocation location: Int, additionalLineFragmentCount: Int = 0) -> [LineFragment] {
+    public func typesetLineFragments(toLocation location: Int, additionalLineFragmentCount: Int = 0) -> [LineFragment] {
         let lineFragments = typesetLineFragments(until: .characterIndex(location), additionalLineFragmentCount: additionalLineFragmentCount)
         if isFinishedTypesetting {
             attributedString = nil
@@ -102,7 +102,7 @@ final class LineTypesetter {
         return lineFragments
     }
 
-    func lineFragment(withID lineFragmentID: LineFragmentID) -> LineFragment? {
+    public func lineFragment(withID lineFragmentID: LineFragmentID) -> LineFragment? {
         if let index = lineFragmentsMap[lineFragmentID] {
             return lineFragments[index]
         } else {

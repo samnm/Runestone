@@ -1,31 +1,31 @@
 import CoreText
 import Foundation
 
-struct LineFragmentID: Identifiable, Hashable {
-    let id: String
+public struct LineFragmentID: Identifiable, Hashable {
+    public let id: String
 
-    init(lineId: String, lineFragmentIndex: Int) {
+    public init(lineId: String, lineFragmentIndex: Int) {
         self.id = "\(lineId)[\(lineFragmentIndex)]"
     }
 }
 
 extension LineFragmentID: CustomDebugStringConvertible {
-    var debugDescription: String {
+    public var debugDescription: String {
         return id
     }
 }
 
-final class LineFragment {
-    let id: LineFragmentID
-    let index: Int
-    let range: NSRange
-    let line: CTLine
-    let descent: CGFloat
-    let baseSize: CGSize
-    let scaledSize: CGSize
-    let yPosition: CGFloat
+public final class LineFragment {
+    public let id: LineFragmentID
+    public let index: Int
+    public let range: NSRange
+    public let line: CTLine
+    public let descent: CGFloat
+    public let baseSize: CGSize
+    public let scaledSize: CGSize
+    public let yPosition: CGFloat
 
-    init(id: LineFragmentID, index: Int, range: NSRange, line: CTLine, descent: CGFloat, baseSize: CGSize, scaledSize: CGSize, yPosition: CGFloat) {
+    public init(id: LineFragmentID, index: Int, range: NSRange, line: CTLine, descent: CGFloat, baseSize: CGSize, scaledSize: CGSize, yPosition: CGFloat) {
         self.id = id
         self.index = index
         self.range = range
@@ -38,7 +38,7 @@ final class LineFragment {
 }
 
 extension LineFragment: CustomDebugStringConvertible {
-    var debugDescription: String {
+    public var debugDescription: String {
         return "[LineFragment id=\(id) descent=\(descent) baseSize=\(baseSize) scaledSize=\(scaledSize) yPosition=\(yPosition)]"
     }
 }
