@@ -1,9 +1,11 @@
 import Foundation
 
-class RedBlackTreeChildrenUpdater<NodeID: RedBlackTreeNodeID, NodeValue: RedBlackTreeNodeValue, NodeData> {
-    typealias Node = RedBlackTreeNode<NodeID, NodeValue, NodeData>
+open class RedBlackTreeChildrenUpdater<NodeID: RedBlackTreeNodeID, NodeValue: RedBlackTreeNodeValue, NodeData> {
+    public typealias Node = RedBlackTreeNode<NodeID, NodeValue, NodeData>
 
-    func updateAfterChangingChildren(of node: Node) -> Bool {
+    public init() {}
+
+    open func updateAfterChangingChildren(of node: Node) -> Bool {
         return false
     }
 }

@@ -1,6 +1,6 @@
 import Foundation
 
-enum RedBlackTreeNodeColor {
+public enum RedBlackTreeNodeColor {
     case black
     case red
 }

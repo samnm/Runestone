@@ -1,22 +1,22 @@
 import Foundation
 
-final class ClosedRangeValueSearchQuery<NodeID: RedBlackTreeNodeID, NodeValue: RedBlackTreeNodeValue, NodeData>: RedBlackTreeSearchQuery {
+final public class ClosedRangeValueSearchQuery<NodeID: RedBlackTreeNodeID, NodeValue: RedBlackTreeNodeValue, NodeData>: RedBlackTreeSearchQuery {
     private let range: ClosedRange<NodeValue>
     private var cachedNodeLocations: [NodeID: NodeValue] = [:]
 
-    init(range: ClosedRange<NodeValue>) {
+    public init(range: ClosedRange<NodeValue>) {
         self.range = range
     }
 
-    func shouldTraverseLeftChildren(of node: RedBlackTreeNode<NodeID, NodeValue, NodeData>) -> Bool {
+    public func shouldTraverseLeftChildren(of node: RedBlackTreeNode<NodeID, NodeValue, NodeData>) -> Bool {
         return location(of: node) > range.upperBound
     }
 
-    func shouldTraverseRightChildren(of node: RedBlackTreeNode<NodeID, NodeValue, NodeData>) -> Bool {
+    public func shouldTraverseRightChildren(of node: RedBlackTreeNode<NodeID, NodeValue, NodeData>) -> Bool {
         return location(of: node) + node.value < range.upperBound
     }
 
-    func shouldInclude(_ node: RedBlackTreeNode<NodeID, NodeValue, NodeData>) -> Bool {
+    public func shouldInclude(_ node: RedBlackTreeNode<NodeID, NodeValue, NodeData>) -> Bool {
         let nodeLowerBound = location(of: node)
         let nodeUpperBound = nodeLowerBound + node.value
         return nodeLowerBound <= range.upperBound && range.lowerBound <= nodeUpperBound

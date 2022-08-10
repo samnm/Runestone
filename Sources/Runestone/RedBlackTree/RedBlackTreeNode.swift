@@ -1,30 +1,30 @@
 import Foundation
 
-protocol RedBlackTreeNodeID: Identifiable, Hashable {
+public protocol RedBlackTreeNodeID: Identifiable, Hashable {
     init()
 }
 
-typealias RedBlackTreeNodeValue = Comparable & AdditiveArithmetic
+public typealias RedBlackTreeNodeValue = Comparable & AdditiveArithmetic
 
-final class RedBlackTreeNode<NodeID: RedBlackTreeNodeID, NodeValue: RedBlackTreeNodeValue, NodeData> {
-    typealias Tree = RedBlackTree<NodeID, NodeValue, NodeData>
+final public class RedBlackTreeNode<NodeID: RedBlackTreeNodeID, NodeValue: RedBlackTreeNodeValue, NodeData> {
+    public typealias Tree = RedBlackTree<NodeID, NodeValue, NodeData>
 
-    let id = NodeID()
-    var nodeTotalValue: NodeValue
-    var nodeTotalCount: Int
-    var location: NodeValue {
+    public let id = NodeID()
+    public internal(set) var nodeTotalValue: NodeValue
+    public internal(set) var nodeTotalCount: Int
+    public var location: NodeValue {
         return tree.location(of: self)
     }
-    var value: NodeValue
-    var index: Int {
+    public var value: NodeValue
+    public var index: Int {
         return tree.index(of: self)
     }
-    var left: RedBlackTreeNode?
-    var right: RedBlackTreeNode?
-    weak var parent: RedBlackTreeNode?
-    var color: RedBlackTreeNodeColor = .black
-    let data: NodeData
-    var tree: Tree {
+    public internal(set) var left: RedBlackTreeNode?
+    public internal(set) var right: RedBlackTreeNode?
+    public internal(set) weak var parent: RedBlackTreeNode?
+    public internal(set) var color: RedBlackTreeNodeColor = .black
+    public let data: NodeData
+    public var tree: Tree {
         if let tree = _tree {
             return tree
         } else {
@@ -34,7 +34,7 @@ final class RedBlackTreeNode<NodeID: RedBlackTreeNodeID, NodeValue: RedBlackTree
 
     private weak var _tree: Tree?
 
-    init(tree: Tree, value: NodeValue, data: NodeData) {
+    public init(tree: Tree, value: NodeValue, data: NodeData) {
         self._tree = tree
         self.nodeTotalCount = 1
         self.nodeTotalValue = value
@@ -44,21 +44,21 @@ final class RedBlackTreeNode<NodeID: RedBlackTreeNodeID, NodeValue: RedBlackTree
 }
 
 extension RedBlackTreeNode {
-    var leftMost: RedBlackTreeNode {
+    public var leftMost: RedBlackTreeNode {
         var node = self
         while let newNode = node.left {
             node = newNode
         }
         return node
     }
-    var rightMost: RedBlackTreeNode {
+    public var rightMost: RedBlackTreeNode {
         var node = self
         while let newNode = node.right {
             node = newNode
         }
         return node
     }
-    var previous: RedBlackTreeNode {
+    public var previous: RedBlackTreeNode {
         if let left = left {
             return left.rightMost
         } else {
@@ -71,7 +71,7 @@ extension RedBlackTreeNode {
             return node
         }
     }
-    var next: RedBlackTreeNode {
+    public var next: RedBlackTreeNode {
         if let right = right {
             return right.leftMost
         } else {
@@ -87,23 +87,23 @@ extension RedBlackTreeNode {
 }
 
 extension RedBlackTreeNode: Hashable {
-    static func == (lhs: RedBlackTreeNode<NodeID, NodeValue, NodeData>, rhs: RedBlackTreeNode<NodeID, NodeValue, NodeData>) -> Bool {
+    public static func == (lhs: RedBlackTreeNode<NodeID, NodeValue, NodeData>, rhs: RedBlackTreeNode<NodeID, NodeValue, NodeData>) -> Bool {
         return lhs.id == rhs.id
     }
 
-    func hash(into hasher: inout Hasher) {
+    public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
 }
 
 extension RedBlackTreeNode where NodeData == Void {
-    convenience init(tree: Tree, value: NodeValue) {
+    public convenience init(tree: Tree, value: NodeValue) {
         self.init(tree: tree, value: value, data: ())
     }
 }
 
 extension RedBlackTreeNode: CustomDebugStringConvertible {
-    var debugDescription: String {
+    public var debugDescription: String {
         return "[RedBlackTreeNode index=\(index) location=\(location) nodeTotalCount=\(nodeTotalCount)]"
     }
 }

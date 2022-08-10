@@ -2,45 +2,45 @@
 
 import Foundation
 
-final class RedBlackTree<NodeID: RedBlackTreeNodeID, NodeValue: RedBlackTreeNodeValue, NodeData> {
-    typealias Node = RedBlackTreeNode<NodeID, NodeValue, NodeData>
+final public class RedBlackTree<NodeID: RedBlackTreeNodeID, NodeValue: RedBlackTreeNodeValue, NodeData> {
+    public typealias Node = RedBlackTreeNode<NodeID, NodeValue, NodeData>
 
     // swiftlint:disable:next implicitly_unwrapped_optional
-    private(set) var root: Node!
-    var nodeTotalCount: Int {
+    public private(set) var root: Node!
+    public var nodeTotalCount: Int {
         return root.nodeTotalCount
     }
-    var nodeTotalValue: NodeValue {
+    public var nodeTotalValue: NodeValue {
         return root.nodeTotalValue
     }
-    var childrenUpdater: RedBlackTreeChildrenUpdater<NodeID, NodeValue, NodeData>?
+    public var childrenUpdater: RedBlackTreeChildrenUpdater<NodeID, NodeValue, NodeData>?
 
     private let minimumValue: NodeValue
 
-    init(minimumValue: NodeValue, rootValue: NodeValue, rootData: NodeData) {
+    public init(minimumValue: NodeValue, rootValue: NodeValue, rootData: NodeData) {
         self.minimumValue = minimumValue
         self.root = Node(tree: self, value: rootValue, data: rootData)
         self.root.color = .black
     }
 
-    func reset(rootValue: NodeValue, rootData: NodeData) {
+    public func reset(rootValue: NodeValue, rootData: NodeData) {
         root = Node(tree: self, value: rootValue, data: rootData)
     }
 
-    func rebuild(from nodes: [Node]) {
+    public func rebuild(from nodes: [Node]) {
         assert(!nodes.isEmpty, "Cannot rebuild tree from empty set of nodes")
         let height = getTreeHeight(nodeCount: nodes.count)
         root = buildTree(from: nodes, start: 0, end: nodes.count, subtreeHeight: height)
         root.color = .black
     }
 
-    func node(containingLocation location: NodeValue) -> Node {
+    public func node(containingLocation location: NodeValue) -> Node {
         assert(location >= minimumValue)
         assert(location <= root.nodeTotalValue)
         return node(containingLocation: location, minimumValue: minimumValue, valueKeyPath: \.value, totalValueKeyPath: \.nodeTotalValue)!
     }
 
-    func node<T: Comparable & AdditiveArithmetic>(
+    public func node<T: Comparable & AdditiveArithmetic>(
         containingLocation location: T,
         minimumValue: T,
         valueKeyPath: KeyPath<Node, T>,
@@ -70,7 +70,7 @@ final class RedBlackTree<NodeID: RedBlackTreeNodeID, NodeValue: RedBlackTreeNode
         }
     }
 
-    func nodePosition(at location: NodeValue) -> RedBlackTreeNodePosition<NodeValue>? {
+    public func nodePosition(at location: NodeValue) -> RedBlackTreeNodePosition<NodeValue>? {
         guard location >= minimumValue && location <= root.nodeTotalValue else {
             return nil
         }
@@ -113,11 +113,11 @@ final class RedBlackTree<NodeID: RedBlackTreeNodeID, NodeValue: RedBlackTreeNode
         }
     }
 
-    func location(of node: Node) -> NodeValue {
+    public func location(of node: Node) -> NodeValue {
         return offset(of: node, valueKeyPath: \.value, totalValueKeyPath: \.nodeTotalValue, minimumValue: minimumValue)
     }
 
-    func offset<T: AdditiveArithmetic>(of node: Node, valueKeyPath: KeyPath<Node, T>, totalValueKeyPath: KeyPath<Node, T>, minimumValue: T) -> T {
+    public func offset<T: AdditiveArithmetic>(of node: Node, valueKeyPath: KeyPath<Node, T>, totalValueKeyPath: KeyPath<Node, T>, minimumValue: T) -> T {
         var location = node.left?[keyPath: totalValueKeyPath] ?? minimumValue
         var workingNode = node
         while let parentNode = workingNode.parent {
@@ -132,7 +132,7 @@ final class RedBlackTree<NodeID: RedBlackTreeNodeID, NodeValue: RedBlackTreeNode
         return location
     }
 
-    func index(of node: Node) -> Int {
+    public func index(of node: Node) -> Int {
         var index = node.left?.nodeTotalCount ?? 0
         var workingNode = node
         while let parentNode = workingNode.parent {
@@ -147,7 +147,7 @@ final class RedBlackTree<NodeID: RedBlackTreeNodeID, NodeValue: RedBlackTreeNode
         return index
     }
 
-    func node(atIndex index: Int) -> Node {
+    public func node(atIndex index: Int) -> Node {
         assert(index >= 0)
         assert(index < root.nodeTotalCount)
         var remainingIndex = index
@@ -169,13 +169,13 @@ final class RedBlackTree<NodeID: RedBlackTreeNodeID, NodeValue: RedBlackTreeNode
     }
 
     @discardableResult
-    func insertNode(value: NodeValue, data: NodeData, after existingNode: Node) -> Node {
+    public func insertNode(value: NodeValue, data: NodeData, after existingNode: Node) -> Node {
         let newNode = Node(tree: self, value: value, data: data)
         insert(newNode, after: existingNode)
         return newNode
     }
 
-    func remove(_ removedNode: Node) {
+    public func remove(_ removedNode: Node) {
         if let removedNodeRight = removedNode.right, removedNode.left != nil {
             let leftMost = removedNodeRight.leftMost
             // Remove leftMost node from its current location
@@ -209,7 +209,7 @@ final class RedBlackTree<NodeID: RedBlackTreeNodeID, NodeValue: RedBlackTreeNode
         }
     }
 
-    func updateAfterChangingChildren(of node: Node) {
+    public func updateAfterChangingChildren(of node: Node) {
         var totalCount = 1
         var totalValue = node.value
         if let leftNode = node.left {
@@ -232,12 +232,12 @@ final class RedBlackTree<NodeID: RedBlackTreeNodeID, NodeValue: RedBlackTreeNode
         }
     }
 
-    func searchRange(_ range: ClosedRange<NodeValue>) -> [RedBlackTreeSearchMatch<NodeID, NodeValue, NodeData>] {
+    public func searchRange(_ range: ClosedRange<NodeValue>) -> [RedBlackTreeSearchMatch<NodeID, NodeValue, NodeData>] {
         let query = ClosedRangeValueSearchQuery<NodeID, NodeValue, NodeData>(range: range)
         return search(using: query)
     }
 
-    func search<T: RedBlackTreeSearchQuery>(using query: T)
+    public func search<T: RedBlackTreeSearchQuery>(using query: T)
     -> [RedBlackTreeSearchMatch<NodeID, NodeValue, NodeData>]
     where T.NodeID == NodeID, T.NodeValue == NodeValue, T.NodeData == NodeData {
         var matches: [RedBlackTreeSearchMatch<NodeID, NodeValue, NodeData>] = []
@@ -508,7 +508,7 @@ private extension RedBlackTree {
 }
 
 extension RedBlackTree: CustomDebugStringConvertible {
-    var debugDescription: String {
+    public var debugDescription: String {
         return append(root, to: "", indent: 0)
     }
 

@@ -1375,6 +1375,7 @@ extension TextInputView {
             return nil
         }
         let range = NSRange(location: fromIndexedPosition.index, length: toIndexedPosition.index - fromIndexedPosition.index)
+        print(range)
         return IndexedRange(range)
     }
 
