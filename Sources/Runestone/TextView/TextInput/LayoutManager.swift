@@ -451,36 +451,6 @@ final class LayoutManager {
                            needleInPreviewRange: needleInPreviewRange,
                            lineControllers: lineControllers)
     }
-
-    func accessory(at location: Int) -> LineAccessory? {
-        let lines = lineManager.lines(in: NSRange(location: location, length: 0))
-        let lineControllers = lines.map(lineController(for:))
-
-        guard let lineController = lineControllers.first else {
-            return nil
-        }
-
-        let relativeLocation = location - lineController.line.location
-        var effectiveRange: NSRange = .init()
-        guard let attributedString = lineController.attributedString,
-            let attachment = attributedString.attribute(
-            .attachment,
-            at: relativeLocation,
-            longestEffectiveRange: &effectiveRange,
-            in: NSRange(location: 0, length: attributedString.length)
-        ) else {
-            return nil
-        }
-
-        guard let attachment = attachment as? NSTextAttachment,
-              let data = attachment.contents else {
-            return nil
-        }
-        let traits = try! JSONDecoder().decode(AccessoryTraits.self, from: data)
-        let color = traits.color.cgColor
-        effectiveRange.location += lineController.line.location
-        return LineAccessory(attachment: traits.attachment, color: color, range: effectiveRange)
-    }
 }
 
 // MARK: - UITextInput

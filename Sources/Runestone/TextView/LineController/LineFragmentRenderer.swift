@@ -3,7 +3,6 @@ import UIKit
 
 protocol LineFragmentRendererDelegate: AnyObject {
     func string(in lineFragmentRenderer: LineFragmentRenderer) -> String?
-    func accessory(in lineFragmentRenderer: LineFragmentRenderer) -> [LineAccessory]?
 }
 
 final class LineFragmentRenderer {
@@ -32,31 +31,12 @@ final class LineFragmentRenderer {
 
     func draw(to context: CGContext) {
         drawMarkedRange(to: context)
-        drawAccessory(to: context)
         drawInvisibleCharacters(to: context)
         drawText(to: context)
     }
 }
 
 private extension LineFragmentRenderer {
-    private func drawAccessory(to context: CGContext) {
-        guard let accessories = delegate?.accessory(in: self) else {
-            return
-        }
-        for accessory in accessories {
-            context.saveGState()
-            let startX = CTLineGetOffsetForStringIndex(lineFragment.line, accessory.range.location, nil)
-            let endX = CTLineGetOffsetForStringIndex(lineFragment.line, accessory.range.location + accessory.range.length, nil)
-            let rect = CGRect(x: startX, y: 0, width: endX - startX, height: lineFragment.scaledSize.height)
-            context.setFillColor(accessory.color)
-            let cornerRadius = 3.0
-            let path = CGPath(roundedRect: rect, cornerWidth: cornerRadius, cornerHeight: cornerRadius, transform: nil)
-            context.addPath(path)
-            context.fillPath()
-            context.restoreGState()
-        }
-    }
-
     private func drawMarkedRange(to context: CGContext) {
         if let markedRange = markedRange {
             context.saveGState()

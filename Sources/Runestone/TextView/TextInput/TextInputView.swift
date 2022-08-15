@@ -751,10 +751,6 @@ final class TextInputView: UIView, UITextInput {
         }
     }
 
-    func accessory(at location: Int) -> LineAccessory? {
-        layoutManager.accessory(at: location)
-    }
-
     func isIndentation(at location: Int) -> Bool {
         guard let line = lineManager.line(containingCharacterAt: location) else {
             return false
@@ -1375,7 +1371,6 @@ extension TextInputView {
             return nil
         }
         let range = NSRange(location: fromIndexedPosition.index, length: toIndexedPosition.index - fromIndexedPosition.index)
-        print(range)
         return IndexedRange(range)
     }
 

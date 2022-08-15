@@ -2,7 +2,6 @@ import UIKit
 
 protocol LineFragmentControllerDelegate: AnyObject {
     func string(in controller: LineFragmentController) -> String?
-    func accessory(in controller: LineFragmentController) -> [LineAccessory]?
 }
 
 final class LineFragmentController {
@@ -74,9 +73,5 @@ final class LineFragmentController {
 extension LineFragmentController: LineFragmentRendererDelegate {
     func string(in lineFragmentRenderer: LineFragmentRenderer) -> String? {
         return delegate?.string(in: self)
-    }
-
-    func accessory(in lineFragmentRenderer: LineFragmentRenderer) -> [LineAccessory]? {
-        return delegate?.accessory(in: self)
     }
 }
