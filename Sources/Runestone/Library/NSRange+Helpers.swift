@@ -3,7 +3,7 @@ import Foundation
 extension NSRange {
     /// Creates an NSRange from a `ByteRange`.
     /// - Parameter byteRange: `ByteRange` to convert to NSRange.
-    init(_ byteRange: ByteRange) {
+    public init(_ byteRange: ByteRange) {
         let location = byteRange.location.value / 2
         let length = byteRange.length.value / 2
         self.init(location: location, length: length)
@@ -51,7 +51,7 @@ extension NSRange {
     /// Checks if range overlaps another range.
     /// - Parameter range: Range to check against.
     /// - Returns: True if the ranges overlap otherwise false.
-    func overlaps(_ range: NSRange) -> Bool {
+    public func overlaps(_ range: NSRange) -> Bool {
         let r1 = location ..< location + length
         let r2 = range.location ..< range.location + range.length
         return r1.overlaps(r2)
@@ -59,7 +59,7 @@ extension NSRange {
 
     /// Returns a range that is guaranteed not to have a negative length. As an example the range (20, -4) will be converted to (16, 4)
     /// and the range (20, -25) will be converted to (0, 20).
-    var nonNegativeLength: NSRange {
+    public var nonNegativeLength: NSRange {
         if length < 0 {
             let absoluteLength = abs(length)
             let safeAbsoluteLength = min(absoluteLength, location)
