@@ -1,6 +1,6 @@
 import Foundation
 
-extension NSString {
+public extension NSString {
     var byteCount: ByteCount {
         return ByteCount(length * 2)
     }
