@@ -1,12 +1,12 @@
 import Foundation
 import TreeSitter
 
-protocol TreeSitterParserDelegate: AnyObject {
+public protocol TreeSitterParserDelegate: AnyObject {
     func parser(_ parser: TreeSitterParser, bytesAt byteIndex: ByteCount) -> TreeSitterTextProviderResult?
 }
 
 final public class TreeSitterParser {
-    weak var delegate: TreeSitterParserDelegate?
+    public weak var delegate: TreeSitterParserDelegate?
     let encoding: TSInputEncoding
     public var language: UnsafePointer<TSLanguage>? {
         didSet {

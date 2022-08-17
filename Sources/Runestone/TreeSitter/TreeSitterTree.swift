@@ -14,13 +14,13 @@ final public class TreeSitterTree {
         ts_tree_delete(pointer)
     }
 
-    func apply(_ inputEdit: TreeSitterInputEdit) {
+    public func apply(_ inputEdit: TreeSitterInputEdit) {
         withUnsafePointer(to: TSInputEdit(inputEdit)) { inputEditPointer in
             ts_tree_edit(pointer, inputEditPointer)
         }
     }
 
-    func rangesChanged(comparingTo otherTree: TreeSitterTree) -> [TreeSitterTextRange] {
+    public func rangesChanged(comparingTo otherTree: TreeSitterTree) -> [TreeSitterTextRange] {
         var count = CUnsignedInt(0)
         let ptr = ts_tree_get_changed_ranges(pointer, otherTree.pointer, &count)
         return UnsafeBufferPointer(start: ptr, count: Int(count)).map { range in

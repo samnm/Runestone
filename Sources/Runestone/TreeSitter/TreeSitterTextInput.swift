@@ -1,8 +1,13 @@
 import TreeSitter
 
-struct TreeSitterTextProviderResult {
-    let bytes: UnsafePointer<Int8>
-    let length: UInt32
+public struct TreeSitterTextProviderResult {
+    public let bytes: UnsafePointer<Int8>
+    public let length: UInt32
+
+    public init(bytes: UnsafePointer<Int8>, length: UInt32) {
+        self.bytes = bytes
+        self.length = length
+    }
 }
 
 typealias TreeSitterReadCallback = (_ byteIndex: ByteCount, _ position: TreeSitterTextPoint) -> TreeSitterTextProviderResult?
