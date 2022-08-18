@@ -27,7 +27,7 @@ public final class StringView {
             }
         }
     }
-    private var swiftString: String {
+    public var swiftString: String {
         if let swiftString = _swiftString {
             return swiftString
         } else {
