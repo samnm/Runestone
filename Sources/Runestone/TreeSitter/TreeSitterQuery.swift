@@ -1,6 +1,6 @@
 import TreeSitter
 
-enum TreeSitterQueryError: Error {
+public enum TreeSitterQueryError: Error {
     case syntax(offset: UInt32)
     case nodeType(offset: UInt32)
     case field(offset: UInt32)
@@ -9,7 +9,7 @@ enum TreeSitterQueryError: Error {
     case unknown
 }
 
-final class TreeSitterQuery {
+public final class TreeSitterQuery {
     let pointer: OpaquePointer
 
     private let language: UnsafePointer<TSLanguage>
@@ -17,7 +17,7 @@ final class TreeSitterQuery {
         return ts_query_pattern_count(pointer)
     }
 
-    init(source: String, language: UnsafePointer<TSLanguage>) throws {
+    public init(source: String, language: UnsafePointer<TSLanguage>) throws {
         let errorOffset = UnsafeMutablePointer<UInt32>.allocate(capacity: 1)
         let errorType = UnsafeMutablePointer<TSQueryError>.allocate(capacity: 1)
         let pointer = source.withCString { cstr in
@@ -52,14 +52,14 @@ final class TreeSitterQuery {
         ts_query_delete(pointer)
     }
 
-    func captureName(forId id: UInt32) -> String {
+    public func captureName(forId id: UInt32) -> String {
         let lengthPointer = UnsafeMutablePointer<UInt32>.allocate(capacity: 1)
         let cString = ts_query_capture_name_for_id(pointer, id, lengthPointer)
         lengthPointer.deallocate()
         return String(cString: cString!)
     }
 
-    func predicates(forPatternIndex index: UInt32) -> [TreeSitterPredicate] {
+    public func predicates(forPatternIndex index: UInt32) -> [TreeSitterPredicate] {
         let lengthPointer = UnsafeMutablePointer<UInt32>.allocate(capacity: 1)
         defer {
             lengthPointer.deallocate()

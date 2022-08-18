@@ -1,12 +1,12 @@
 import TreeSitter
 
-final class TreeSitterQueryCursor {
+public final class TreeSitterQueryCursor {
     private let pointer: OpaquePointer
     private let query: TreeSitterQuery
     private let node: TreeSitterNode
     private var haveExecuted = false
 
-    init(query: TreeSitterQuery, node: TreeSitterNode) {
+    public init(query: TreeSitterQuery, node: TreeSitterNode) {
         self.pointer = ts_query_cursor_new()
         self.query = query
         self.node = node
@@ -16,20 +16,20 @@ final class TreeSitterQueryCursor {
         ts_query_cursor_delete(pointer)
     }
 
-    func setQueryRange(_ range: ByteRange) {
+    public func setQueryRange(_ range: ByteRange) {
         let start = UInt32(range.location.value)
         let end = UInt32((range.location + range.length).value)
         ts_query_cursor_set_byte_range(pointer, start, end)
     }
 
-    func execute() {
+    public func execute() {
         if !haveExecuted {
             haveExecuted = true
             ts_query_cursor_exec(pointer, query.pointer, node.rawValue)
         }
     }
 
-    func validCaptures(in stringView: StringView) -> [TreeSitterCapture] {
+    public func validCaptures(in stringView: StringView) -> [TreeSitterCapture] {
         guard haveExecuted else {
             fatalError("Cannot get captures of a query that has not been executed.")
         }

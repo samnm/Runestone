@@ -265,7 +265,7 @@ extension TreeSitterLanguageLayer: CustomDebugStringConvertible {
     }
 }
 
-private extension TreeSitterCapture {
+public extension TreeSitterCapture {
     static func captureLayerSorting(_ lhs: TreeSitterCapture, _ rhs: TreeSitterCapture) -> Bool {
         // We sort the captures by three parameters:
         // 1. The location. Captures that are early in the text should be sorted first.

@@ -1,15 +1,15 @@
 import Foundation
 
-final class TreeSitterCapture {
-    let node: TreeSitterNode
-    let index: UInt32
-    let name: String
-    let byteRange: ByteRange
-    let properties: [String: String]
-    let textPredicates: [TreeSitterTextPredicate]
-    let nameComponentCount: Int
+public final class TreeSitterCapture {
+    public let node: TreeSitterNode
+    public let index: UInt32
+    public let name: String
+    public let byteRange: ByteRange
+    public let properties: [String: String]
+    public let textPredicates: [TreeSitterTextPredicate]
+    public let nameComponentCount: Int
 
-    convenience init(node: TreeSitterNode, index: UInt32, name: String, predicates: [TreeSitterPredicate]) {
+    public convenience init(node: TreeSitterNode, index: UInt32, name: String, predicates: [TreeSitterPredicate]) {
         self.init(node: node, index: index, name: name, byteRange: node.byteRange, predicates: predicates)
     }
 
@@ -26,7 +26,7 @@ final class TreeSitterCapture {
 }
 
 extension TreeSitterCapture: CustomDebugStringConvertible {
-    var debugDescription: String {
+    public var debugDescription: String {
         return "[TreeSitterCapture byteRange=\(byteRange) name=\(name) properties=\(properties) textPredicates=\(textPredicates)]"
     }
 }
